@@ -8,12 +8,17 @@ export function GenerateCartSection() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const generateRandomCartNumber = (): number => {
+    return Math.floor(Math.random() * 20) + 1;
+  };
+
   const generateCart = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('YOUR_API_URL');
+      const cartNumber = generateRandomCartNumber();
+      const response = await fetch(`https://dummyjson.com/carts/${cartNumber}`);
       if (!response.ok) {
         throw new Error('Failed to fetch cart data');
       }
@@ -52,17 +57,31 @@ export function GenerateCartSection() {
               >
                 {loading ? 'Generando...' : 'Generar Carrito'}
               </Button>
-              {cart && (
-                <Link
-                  href='#'
-                  className='inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
-                  prefetch={false}
-                >
-                  Finish Buy
+
+              {cart ? (
+                <Link href='/checkout'>
+                  <Button
+                    disabled={loading || !cart}
+                    className='inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
+                  >
+                    Finalizar Compra
+                  </Button>
                 </Link>
+              ) : (
+                <Button
+                  disabled={loading || !cart}
+                  className='inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
+                >
+                  Finalizar Compra
+                </Button>
               )}
             </div>
             {error && <p className='text-sm text-red-500'>{error}</p>}
+            {cart && (
+              <p className='text-sm text-green-500'>
+                Carrito generado con éxito!
+              </p>
+            )}
           </div>
           <Image
             src='/images/FlappCommerceIA.webp'

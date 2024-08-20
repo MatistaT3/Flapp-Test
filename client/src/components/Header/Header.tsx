@@ -13,7 +13,7 @@ export function Header() {
           src='/images/FlappLogoBlue.png'
           alt='Flapp Logo'
           width={160}
-          height={160}
+          height={50.83}
         />
       </Link>
     </header>
