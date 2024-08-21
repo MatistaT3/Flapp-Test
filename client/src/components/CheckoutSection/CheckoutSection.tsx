@@ -25,7 +25,6 @@ export function CheckoutSection() {
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem('cart') || '{}');
     setCart(cartData);
-    console.log(cartData);
   }, []);
 
   useEffect(() => {
@@ -42,11 +41,14 @@ export function CheckoutSection() {
     setQuoteStatus(null);
   };
 
+  const [loading, setLoading] = useState(false);
+
   const handleQuoteShipping = async () => {
     if (!cart) {
       console.error('No se ha generado un carrito.');
       return;
     }
+    setLoading(true);
 
     try {
       const response = await axios.post('http://localhost:4000/api/cart', {
@@ -60,14 +62,10 @@ export function CheckoutSection() {
     } catch (error) {
       console.error('Error al cotizar despacho:', error);
       setQuoteStatus('failure');
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (cart) {
-      console.log('Carrito generado:', cart);
-    }
-  }, [cart]);
 
   return (
     <Card className='w-full max-w-3xl mx-auto'>
@@ -97,7 +95,7 @@ export function CheckoutSection() {
         <Button
           onClick={handleQuoteShipping}
           className='w-full sm:w-auto'
-          disabled={!cart}
+          disabled={!cart || loading}
         >
           Quote dispatch
         </Button>
