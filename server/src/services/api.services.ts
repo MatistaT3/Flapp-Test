@@ -8,16 +8,23 @@ export const fetchProductsFromApi = async (): Promise<BaseProduct[]> => {
   try {
     let productsInStore: BaseProduct[] = [];
     let page = 1;
-    let totalPages = 1;
+    let limit = 10;
 
-    while (page <= totalPages) {
-      const { data } = await axios.get<ApiResponse>(
-        `${DUMMY_API_URL}?page=${page}&limit=100`
-      );
+    const { data } = await axios.get<ApiResponse>(
+      `${DUMMY_API_URL}?skip=0&limit=${limit}`
+    );
 
-      productsInStore = productsInStore.concat(data.products);
-      totalPages = data.totalPages;
+    const totalProducts = data.total;
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    productsInStore.push(...data.products);
+
+    while (page < totalPages) {
       page++;
+      const { data } = await axios.get<ApiResponse>(
+        `${DUMMY_API_URL}?skip=${(page - 1) * limit}&limit=${limit}`
+      );
+      productsInStore.push(...data.products);
     }
 
     return productsInStore;

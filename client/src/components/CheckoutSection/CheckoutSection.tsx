@@ -42,8 +42,25 @@ export function CheckoutSection() {
     setQuoteStatus(null);
   };
 
-  const handleBack = () => {
-    setQuoteStatus(null);
+  const handleQuoteShipping = async () => {
+    if (!cart) {
+      console.error('No se ha generado un carrito.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:4000/api/cart', {
+        products: cartList,
+      });
+      if (response.data.response.canReceiveCart === true) {
+        setQuoteStatus('success');
+      } else {
+        setQuoteStatus('failure');
+      }
+    } catch (error) {
+      console.error('Error al cotizar despacho:', error);
+      setQuoteStatus('failure');
+    }
   };
 
   useEffect(() => {
@@ -78,7 +95,7 @@ export function CheckoutSection() {
       </CardContent>
       <CardFooter className='flex flex-col sm:flex-row gap-4'>
         <Button
-          //onClick={}
+          onClick={handleQuoteShipping}
           className='w-full sm:w-auto'
           disabled={!cart}
         >
@@ -92,11 +109,7 @@ export function CheckoutSection() {
           Clear cart
         </Button>
         <Link href={'/'}>
-          <Button
-            onClick={handleBack}
-            variant='ghost'
-            className='w-full sm:w-auto'
-          >
+          <Button variant='ghost' className='w-full sm:w-auto'>
             <ArrowLeft className='mr-2 h-4 w-4' /> Back
           </Button>
         </Link>

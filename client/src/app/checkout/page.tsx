@@ -6,9 +6,11 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className='flex-1'>
-        <CheckoutSection />
-      </main>
+      <div className='flex items-center justify-center min-h-screen'>
+        <main className='flex-1'>
+          <CheckoutSection />
+        </main>
+      </div>
     </>
   );
 }

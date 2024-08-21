@@ -1,6 +1,6 @@
 export interface BaseProduct {
   id: string;
-  name: string;
+  title: string;
   stock: number;
   rating: number;
 }

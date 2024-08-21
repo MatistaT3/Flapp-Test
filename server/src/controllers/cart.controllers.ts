@@ -20,16 +20,18 @@ export const addToCart = async (
     const canReceiveCart = checkCartAvailability(productsDetails);
 
     if (!canReceiveCart) {
+      console.log('No hay suficiente stock para completar la compra');
       return res.status(400).json({
         message: 'No hay suficiente stock para completar la compra',
         response: { canReceiveCart },
       });
+    } else {
+      console.log('Productos recibidos correctamente');
+      return res.status(200).json({
+        message: 'Productos recibidos correctamente',
+        response: { canReceiveCart },
+      });
     }
-
-    return res.status(200).json({
-      message: 'Productos recibidos correctamente',
-      response: { canReceiveCart },
-    });
   } catch (error) {
     console.error('Error processing cart:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -39,10 +41,10 @@ export const addToCart = async (
 const logCartDetails = (productsDetails: ProductDetails[]): void => {
   console.log('Detalles del carrito recibido:');
   productsDetails.forEach(
-    ({ id, name, price, discount, quantity, stock, rating, stockReal }) => {
+    ({ id, title, price, discount, quantity, stock, rating, stockReal }) => {
       console.log(`
       ID: ${id}
-      Nombre: ${name}
+      Nombre: ${title}
       Precio por unidad: ${price}
       Descuento total: ${discount}
       Cantidad solicitada: ${quantity}

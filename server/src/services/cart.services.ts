@@ -37,7 +37,7 @@ const mapProductToProductDetails = (
 ): ProductDetails => {
   return {
     id: product.id,
-    name: productInStore.name,
+    title: productInStore.title,
     price: product.price,
     discount: product.discountPercentage,
     quantity: product.quantity,
@@ -50,7 +50,7 @@ const mapProductToProductDetails = (
 const mapProductToNotFound = (product: Products): ProductDetails => {
   return {
     id: product.id,
-    name: 'Producto no encontrado',
+    title: 'Producto no encontrado',
     price: product.price,
     discount: product.discountPercentage,
     quantity: product.quantity,

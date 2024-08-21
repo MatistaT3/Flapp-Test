@@ -2,16 +2,9 @@ import { useGenerateCart } from '@/hooks/useGenerateCart';
 import { Button } from '@/components/ui/button';
 import { CheckoutButton } from '@/components/GenerateCart/CheckoutButton';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
 
 export function GenerateCartSection() {
   const { cart, loading, error, generateCart } = useGenerateCart();
-
-  useEffect(() => {
-    if (cart) {
-      console.log('Carrito generado:', cart);
-    }
-  }, [cart]);
 
   return (
     <section className='w-full py-12 md:py-24 lg:py-32'>
