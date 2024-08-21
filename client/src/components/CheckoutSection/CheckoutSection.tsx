@@ -1,0 +1,106 @@
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { CartItem } from './CartItem';
+import { CartTotal } from './CartTotal';
+import { QuoteStatus } from './QuoteStatus';
+import { ShoppingCart, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import axios from 'axios';
+
+export function CheckoutSection() {
+  const [cart, setCart] = useState<any>(null);
+  const [cartList, setCartList] = useState<any>(null);
+  const [quoteStatus, setQuoteStatus] = useState<'success' | 'failure' | null>(
+    null
+  );
+
+  useEffect(() => {
+    const cartData = JSON.parse(localStorage.getItem('cart') || '{}');
+    setCart(cartData);
+    console.log(cartData);
+  }, []);
+
+  useEffect(() => {
+    const cartListData = localStorage.getItem('cart');
+    if (cartListData) {
+      setCartList(JSON.parse(cartListData).products);
+    }
+  }, []);
+
+  const handleClearCart = () => {
+    localStorage.removeItem('cart');
+    setCart(null);
+    setCartList(null);
+    setQuoteStatus(null);
+  };
+
+  const handleBack = () => {
+    setQuoteStatus(null);
+  };
+
+  useEffect(() => {
+    if (cart) {
+      console.log('Carrito generado:', cart);
+    }
+  }, [cart]);
+
+  return (
+    <Card className='w-full max-w-3xl mx-auto'>
+      <CardHeader>
+        <CardTitle className='text-2xl font-bold'>Checkout Summary</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className='space-y-4'>
+          {cartList ? (
+            <>
+              {cartList.map((item: any) => (
+                <CartItem key={item.id} item={item} />
+              ))}
+              <Separator className='my-4' />
+              <CartTotal total={cart.discountedTotal} />
+            </>
+          ) : (
+            <div className='text-center text-muted-foreground py-8'>
+              <ShoppingCart className='mx-auto mb-4 h-12 w-12 text-muted-foreground/50' />
+              <p>Your cart is empty</p>
+            </div>
+          )}
+        </div>
+        {quoteStatus && <QuoteStatus quoteStatus={quoteStatus} />}
+      </CardContent>
+      <CardFooter className='flex flex-col sm:flex-row gap-4'>
+        <Button
+          //onClick={}
+          className='w-full sm:w-auto'
+          disabled={!cart}
+        >
+          Quote dispatch
+        </Button>
+        <Button
+          onClick={handleClearCart}
+          variant='outline'
+          className='w-full sm:w-auto'
+        >
+          Clear cart
+        </Button>
+        <Link href={'/'}>
+          <Button
+            onClick={handleBack}
+            variant='ghost'
+            className='w-full sm:w-auto'
+          >
+            <ArrowLeft className='mr-2 h-4 w-4' /> Back
+          </Button>
+        </Link>
+      </CardFooter>
+    </Card>
+  );
+}

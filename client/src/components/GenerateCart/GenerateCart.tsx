@@ -1,39 +1,17 @@
-import { useState } from 'react';
-import Link from 'next/link';
+import { useGenerateCart } from '@/hooks/useGenerateCart';
 import { Button } from '@/components/ui/button';
+import { CheckoutButton } from '@/components/GenerateCart/CheckoutButton';
 import Image from 'next/image';
+import React, { useEffect } from 'react';
 
 export function GenerateCartSection() {
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { cart, loading, error, generateCart } = useGenerateCart();
 
-  const generateRandomCartNumber = (): number => {
-    return Math.floor(Math.random() * 20) + 1;
-  };
-
-  const generateCart = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const cartNumber = generateRandomCartNumber();
-      const response = await fetch(`https://dummyjson.com/carts/${cartNumber}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch cart data');
-      }
-
-      const data = await response.json();
-      setCart(data);
-    } catch (error) {
-      console.error('Error generating cart:', error);
-      setError(
-        'Hubo un error generando el carrito. Por favor intentalo nuevamente.'
-      );
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (cart) {
+      console.log('Carrito generado:', cart);
     }
-  };
+  }, [cart]);
 
   return (
     <section className='w-full py-12 md:py-24 lg:py-32'>
@@ -45,7 +23,7 @@ export function GenerateCartSection() {
                 Bienvenido a Flapp
               </h1>
               <p className='max-w-[600px] text-muted-foreground md:text-xl'>
-                Tú comercio de confianza, solo genera un carrito y dejate
+                Tú comercio de confianza, solo genera un carrito y déjate
                 sorprender por nuestros productos
               </p>
             </div>
@@ -57,29 +35,12 @@ export function GenerateCartSection() {
               >
                 {loading ? 'Generando...' : 'Generar Carrito'}
               </Button>
-
-              {cart ? (
-                <Link href='/checkout'>
-                  <Button
-                    disabled={loading || !cart}
-                    className='inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
-                  >
-                    Finalizar Compra
-                  </Button>
-                </Link>
-              ) : (
-                <Button
-                  disabled={loading || !cart}
-                  className='inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
-                >
-                  Finalizar Compra
-                </Button>
-              )}
+              <CheckoutButton cart={cart} loading={loading} />
             </div>
             {error && <p className='text-sm text-red-500'>{error}</p>}
             {cart && (
               <p className='text-sm text-green-500'>
-                Carrito generado con éxito!
+                ¡Carrito generado con éxito!
               </p>
             )}
           </div>
@@ -87,7 +48,7 @@ export function GenerateCartSection() {
             src='/images/FlappCommerceIA.webp'
             width={550}
             height={550}
-            alt={'FlappCommerceIA'}
+            alt='FlappCommerceIA'
             className='mx-auto aspect-video overflow-hidden rounded-xl object-bottom sm:w-full lg:order-last lg:aspect-square'
           />
         </div>
