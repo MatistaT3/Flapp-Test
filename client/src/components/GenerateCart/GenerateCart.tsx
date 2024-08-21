@@ -1,7 +1,7 @@
 import { useGenerateCart } from '@/hooks/useGenerateCart';
 import { Button } from '@/components/ui/button';
-import { CheckoutButton } from '@/components/GenerateCart/CheckoutButton';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export function GenerateCartSection() {
   const { cart, loading, error, generateCart } = useGenerateCart();
@@ -28,7 +28,11 @@ export function GenerateCartSection() {
               >
                 {loading ? 'Generando...' : 'Generar Carrito'}
               </Button>
-              <CheckoutButton cart={cart} loading={loading} />
+              <Link href='/checkout'>
+                <Button className='inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'>
+                  Finalizar Compra
+                </Button>
+              </Link>
             </div>
             {error && <p className='text-sm text-red-500'>{error}</p>}
             {cart && (

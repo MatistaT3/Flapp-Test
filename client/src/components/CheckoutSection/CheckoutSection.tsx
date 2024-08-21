@@ -70,7 +70,9 @@ export function CheckoutSection() {
   return (
     <Card className='w-full max-w-3xl mx-auto'>
       <CardHeader>
-        <CardTitle className='text-2xl font-bold'>Checkout Summary</CardTitle>
+        <CardTitle className='text-2xl font-bold'>
+          Resumen del carrito
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className='space-y-4'>
@@ -85,7 +87,7 @@ export function CheckoutSection() {
           ) : (
             <div className='text-center text-muted-foreground py-8'>
               <ShoppingCart className='mx-auto mb-4 h-12 w-12 text-muted-foreground/50' />
-              <p>Your cart is empty</p>
+              <p>El carrito está vacío </p>
             </div>
           )}
         </div>
@@ -95,20 +97,22 @@ export function CheckoutSection() {
         <Button
           onClick={handleQuoteShipping}
           className='w-full sm:w-auto'
-          disabled={!cart || loading}
+          disabled={loading || !cartList}
         >
-          Quote dispatch
-        </Button>
-        <Button
-          onClick={handleClearCart}
-          variant='outline'
-          className='w-full sm:w-auto'
-        >
-          Clear cart
+          Cotizar despacho
         </Button>
         <Link href={'/'}>
+          <Button
+            onClick={handleClearCart}
+            variant='outline'
+            className='w-full sm:w-auto'
+          >
+            Limpiar carrito
+          </Button>
+        </Link>
+        <Link href={'/'}>
           <Button variant='ghost' className='w-full sm:w-auto'>
-            <ArrowLeft className='mr-2 h-4 w-4' /> Back
+            <ArrowLeft className='mr-2 h-4 w-4' /> Volver
           </Button>
         </Link>
       </CardFooter>

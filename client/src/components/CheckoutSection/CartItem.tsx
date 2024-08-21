@@ -13,10 +13,12 @@ export const CartItem: React.FC<any> = ({ item }) => {
       <div className='flex-1'>
         <h3 className='font-medium'>{item.title}</h3>
         <p className='text-sm text-muted-foreground'>
-          Quantity: {item.quantity}
+          {item.quantity === 1
+            ? `${item.quantity} Unidad`
+            : `${item.quantity} Unidades`}
         </p>
       </div>
-      <p className='font-medium'>${item.discountedTotal.toFixed(2)}</p>
+      <p className='font-medium'>${item.discountedTotal.toFixed(0)}</p>
     </div>
   );
 };
