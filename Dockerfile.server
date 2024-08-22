@@ -1,0 +1,7 @@
+FROM node:bullseye
+ENV WORKDIR /app
+WORKDIR $WORKDIR
+ADD server ${WORKDIR}/server
+RUN cd server && npm install
+WORKDIR $WORKDIR/server
+CMD ["npm", "run", "dev"]
