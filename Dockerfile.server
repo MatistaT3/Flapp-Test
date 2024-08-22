@@ -1,7 +1,7 @@
 FROM node:bullseye
-ENV WORKDIR /app
-WORKDIR $WORKDIR
-ADD server ${WORKDIR}/server
-RUN cd server && npm install
-WORKDIR $WORKDIR/server
+WORKDIR /app
+COPY server/package*.json ./
+RUN npm install
+COPY server/ ./
+EXPOSE 4000
 CMD ["npm", "run", "dev"]
