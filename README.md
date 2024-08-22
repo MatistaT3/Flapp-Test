@@ -1,4 +1,4 @@
-# Nomad commerce application
+# Flapp application
 
 Este repositorio contiene el servicio de api para el comercio flapp realizado con node.js, express, Typescript y además el frontend necesario para ello en nextjs, se utilizó el lenguaje de TypeScript y para un ejecución más simple se utilizó Docker
 
